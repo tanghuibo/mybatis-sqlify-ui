@@ -42,7 +42,7 @@ function App() {
   }
   return (
     <div className="App">
-      <Row gutter={16}>
+      <Row gutter={16} className="fillHorizontal">
         <Col className="gutter-row" span={12}>
           <div className="formTitle">SQL</div>
           <MybatisEditor

@@ -5,6 +5,10 @@
     font-weight: 600;
 }
 
+.fillHorizontal {
+    width: 100vw;
+}
+
 .runButton {
     margin-top: 10px;
     font-weight: 800;
