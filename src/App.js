@@ -6,6 +6,7 @@ import "./App.css";
 import { Row, Col, Button, Result } from "antd";
 
 function App() {
+  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [sqlifyResult, setSqlifyResult] = useState({});
   const [mybatisSql, setMybatisSql] = useState(
@@ -24,6 +25,7 @@ function App() {
 
   async function runProcess() {
     try {
+      setLoading(true);
       let param = mybatisParam;
       try {
         param = JSON.parse(param);
@@ -38,6 +40,8 @@ function App() {
       if (error.message) {
         setErrorMessage(error.message);
       }
+    } finally {
+      setLoading(false);
     }
   }
   return (
@@ -65,7 +69,12 @@ function App() {
           textAlign: "center"
         }}
       >
-        <Button className="runButton" type="primary" onClick={runProcess}>
+        <Button
+          loading={loading}
+          className="runButton"
+          type="primary"
+          onClick={runProcess}
+        >
           RUN
         </Button>
       </div>
