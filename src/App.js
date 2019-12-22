@@ -1,16 +1,44 @@
 import React, { useState } from "react";
-import axios from "./plugins/axiosPlugin";
 import MybatisEditor from "./components/MybatisEditor/index";
 import JsonEditor from "./components/JsonEditor/index";
+import { sqlify } from "./service";
 import "./App.css";
-import { Row, Col, Button } from "antd";
+import { Row, Col, Button, Result } from "antd";
 
 function App() {
-  const [mybatisSql, setMybatisSql] = useState("");
-  const [mybatisParam, setMybatisParam] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [sqlifyResult, setSqlifyResult] = useState({});
+  const [mybatisSql, setMybatisSql] = useState(
+    "select * from name = #{name} and value = #{value}"
+  );
+  const [mybatisParam, setMybatisParam] = useState(
+    JSON.stringify(
+      {
+        name: "name",
+        value: "value"
+      },
+      2,
+      2
+    )
+  );
 
-  function runProcess() {
-    console.log(mybatisSql, mybatisParam);
+  async function runProcess() {
+    try {
+      let param = mybatisParam;
+      try {
+        param = JSON.parse(param);
+      } catch (error) {}
+
+      let result = await sqlify(mybatisSql, param);
+      setSqlifyResult(result.data);
+      setErrorMessage("");
+    } catch (error) {
+      console.error(error);
+      setSqlifyResult({});
+      if (error.message) {
+        setErrorMessage(error.message);
+      }
+    }
   }
   return (
     <div className="App">
@@ -18,15 +46,15 @@ function App() {
         <Col className="gutter-row" span={12}>
           <div className="formTitle">SQL</div>
           <MybatisEditor
-            height={"40vh"}
+            height={300}
             value={mybatisSql}
             onChange={setMybatisSql}
           />
         </Col>
         <Col className="gutter-row" span={12}>
-          <div className="formTitle">param</div>
+          <div className="formTitle">PARAM</div>
           <JsonEditor
-            height={"40vh"}
+            height={300}
             value={mybatisParam}
             onChange={setMybatisParam}
           />
@@ -37,10 +65,63 @@ function App() {
           textAlign: "center"
         }}
       >
-        <Button className="runButton" onClick={runProcess}>
-          运行
+        <Button className="runButton" type="primary" onClick={runProcess}>
+          RUN
         </Button>
       </div>
+      {errorMessage ? (
+        <div>
+          <Result
+            status="error"
+            title={<span style={{ color: "white" }}>{errorMessage}</span>}
+          />
+        </div>
+      ) : sqlifyResult.param ||
+        sqlifyResult.sqlRenderBefore ||
+        sqlifyResult.sqlRenderAfter ? (
+        <div>
+          <Result
+            status="success"
+            extra={
+              <div>
+                {sqlifyResult.sqlRenderAfter ? (
+                  <div className="showCodeView">
+                    <MybatisEditor
+                      height={100}
+                      readOnly={true}
+                      value={sqlifyResult.sqlRenderAfter}
+                    />
+                  </div>
+                ) : null}
+                <Row gutter={16}>
+                  <Col span={12}>
+                    {sqlifyResult.sqlRenderBefore ? (
+                      <div className="showCodeView">
+                        <MybatisEditor
+                          height={100}
+                          readOnly={true}
+                          value={sqlifyResult.sqlRenderBefore}
+                        />
+                      </div>
+                    ) : null}
+                  </Col>
+                  <Col span={12}>
+                    {sqlifyResult.param ? (
+                      <div className="showCodeView">
+                        <JsonEditor
+                          height={100}
+                          readOnly={true}
+                          value={JSON.stringify(sqlifyResult.param)}
+                        />
+                      </div>
+                    ) : null}
+                  </Col>
+                </Row>
+              </div>
+            }
+          />
+        </div>
+      ) : null}
     </div>
   );
 }

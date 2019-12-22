@@ -9,12 +9,18 @@ import mySqlKeyWords from "./mySqlKeyWords";
 export default function(props) {
   return (
     <MonacoEditor
+      className={props.className}
       height={props.height}
       language="sql"
       theme="vs-dark"
       value={props.value}
       onChange={props.onChange}
-      options={{ autoIndent: true, fontSize: 24, oundedSelection: false }}
+      options={{
+        readOnly: props.readOnly,
+        automaticLayout: props.automaticLayout,
+        autoIndent: true,
+        fontSize: 24
+      }}
       editorDidMount={(editor, monaco) => {
         monaco.languages.registerCompletionItemProvider("sql", {
           provideCompletionItems() {
