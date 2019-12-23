@@ -10,7 +10,7 @@ export default [
     label: "<FOR",
     kind: classKind,
     insertText:
-      'for item="" index="" collection="" open="(" separator="," close=")"',
+      'foreach item="" index="" collection="" open="(" separator="," close=")"',
     detail: "循环"
   },
   {
@@ -40,7 +40,7 @@ export default [
   {
     label: "<SET",
     kind: classKind,
-    insertText: "SET",
+    insertText: "set",
     detail: "set"
   }
 ];

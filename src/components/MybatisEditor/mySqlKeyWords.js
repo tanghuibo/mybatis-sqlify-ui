@@ -1,5 +1,6 @@
 export default [
   "ADD",
+  "DISTINCT",
   "ALL",
   "AND",
   "AS",
