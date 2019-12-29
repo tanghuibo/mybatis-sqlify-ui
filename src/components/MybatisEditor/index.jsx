@@ -16,6 +16,7 @@ export default function(props) {
       value={props.value}
       onChange={props.onChange}
       options={{
+        wordWrap: "wordWrapColumn",
         readOnly: props.readOnly,
         automaticLayout: props.automaticLayout,
         autoIndent: true,
