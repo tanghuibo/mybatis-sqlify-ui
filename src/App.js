@@ -50,7 +50,7 @@ function App() {
         <Col className="gutter-row" span={12}>
           <div className="formTitle">SQL</div>
           <MybatisEditor
-            height={300}
+            height={"calc(68vh - 280px)"}
             value={mybatisSql}
             onChange={setMybatisSql}
           />
@@ -58,7 +58,7 @@ function App() {
         <Col className="gutter-row" span={12}>
           <div className="formTitle">PARAM</div>
           <JsonEditor
-            height={300}
+            height={"calc(68vh - 280px)"}
             value={mybatisParam}
             onChange={setMybatisParam}
           />
@@ -96,7 +96,7 @@ function App() {
                 {sqlifyResult.sqlRenderAfter ? (
                   <div className="showCodeView">
                     <MybatisEditor
-                      height={100}
+                      height={"15vh"}
                       readOnly={true}
                       value={sqlifyResult.sqlRenderAfter}
                     />
@@ -107,7 +107,7 @@ function App() {
                     {sqlifyResult.sqlRenderBefore ? (
                       <div className="showCodeView">
                         <MybatisEditor
-                          height={100}
+                          height={"15vh"}
                           readOnly={true}
                           value={sqlifyResult.sqlRenderBefore}
                         />
@@ -118,7 +118,7 @@ function App() {
                     {sqlifyResult.param ? (
                       <div className="showCodeView">
                         <JsonEditor
-                          height={100}
+                          height={"15vh"}
                           readOnly={true}
                           value={JSON.stringify(sqlifyResult.param)}
                         />
